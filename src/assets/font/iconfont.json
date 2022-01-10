@@ -1,0 +1,79 @@
+{
+  "id": "3128567",
+  "name": "swf-front-end",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "975296",
+      "name": "注册",
+      "font_class": "zhuce",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "1304876",
+      "name": "监控",
+      "font_class": "jiankong",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "1727378",
+      "name": "33资源",
+      "font_class": "ziyuan",
+      "unicode": "e8a4",
+      "unicode_decimal": 59556
+    },
+    {
+      "icon_id": "7581133",
+      "name": "质量管理",
+      "font_class": "zhiliangguanli",
+      "unicode": "e7e6",
+      "unicode_decimal": 59366
+    },
+    {
+      "icon_id": "10595634",
+      "name": "工作流程-流程-状态_jurassic",
+      "font_class": "jurassic_process",
+      "unicode": "e6c4",
+      "unicode_decimal": 59076
+    },
+    {
+      "icon_id": "17694117",
+      "name": "租户管理",
+      "font_class": "zuhuguanli",
+      "unicode": "e6ad",
+      "unicode_decimal": 59053
+    },
+    {
+      "icon_id": "826948",
+      "name": "登录",
+      "font_class": "denglu-copy",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "12331649",
+      "name": "表单",
+      "font_class": "biaodan",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "15388515",
+      "name": "管理员",
+      "font_class": "guanliyuan",
+      "unicode": "e650",
+      "unicode_decimal": 58960
+    },
+    {
+      "icon_id": "11372676",
+      "name": "密码",
+      "font_class": "mima",
+      "unicode": "e8b2",
+      "unicode_decimal": 59570
+    }
+  ]
+}
