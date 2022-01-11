@@ -22,7 +22,7 @@
                             <span>资源管理</span>
                         </template>
                         <!-- 二级菜单 -->
-                        <el-menu-item index="1-4-1">选项1</el-menu-item>
+                        <el-menu-item index="1-4-1">购买服务</el-menu-item>
                     </el-submenu>
                     <el-menu-item index="2">
                         <i class="el-icon-menu"></i>
