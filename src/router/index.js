@@ -26,4 +26,17 @@ const router = new VueRouter({
   routes
 })
 
+// 挂载路由导航守卫
+router.beforeEach((to, from, next)=>{
+  // to 将要访问
+  // from 从哪里访问
+  // next 下一步 next(url):重定向至url  next():继续访问 to 路径
+  if (to.path == '/login') return next();
+  // 获取user
+  const userFlag = window.sessionStorage.getItem("user"); // 取出当前用户
+  if (!userFlag) return next('/login'); // 无值，返回登录页
+  
+  next(); // 符合要求
+})
+
 export default router
