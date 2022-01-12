@@ -14,33 +14,18 @@
         <el-container>
             <!-- 侧边栏 -->
             <el-aside width="200px">
-                <el-menu background-color="#545c64" text-color="#fff" active-text-color="#409eff">
-                    <!-- 一级菜单 -->
-                    <el-submenu index="1">
-                        <template slot="title">
-                            <i class="el-icon-location"></i>
-                            <span>资源管理</span>
-                        </template>
-                        <!-- 二级菜单 -->
-                        <el-menu-item index="1-4-1">购买服务</el-menu-item>
-                    </el-submenu>
-                    <el-menu-item index="2">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">实例管理</span>
-                    </el-menu-item>
-                    <el-menu-item index="3">
-                        <i class="el-icon-document"></i>
-                        <span slot="title">质量管理</span>
-                    </el-menu-item>
-                    <el-menu-item index="4">
-                        <i class="el-icon-setting"></i>
-                        <span slot="title">租户管理</span>
+                <el-menu background-color="#545c64" text-color="#fff" active-text-color="#409eff" :router="true">
+                    <el-menu-item :index="item.path" v-for="item in menuList" :key="item.id">
+                        <i :class="iconsObject[item.id]"></i>
+                        <span slot="title">{{item.title}}</span>
                     </el-menu-item>
                 </el-menu>
             </el-aside>
 
             <!-- 主体内容 -->
-            <el-main>Main</el-main>
+            <el-main>
+                <router-view></router-view>
+            </el-main>
 
         </el-container>
     </el-container>
@@ -51,6 +36,13 @@ export default{
         return {
             // 菜单列表
             menuList:[],
+            // 导航栏按钮icon
+            iconsObject: {
+                '1':'el-icon-coin',
+                '2':'el-icon-set-up',
+                '3':'el-icon-s-data',
+                '4':'el-icon-user',
+            },
         }
     },
     // onload 事件
@@ -65,8 +57,11 @@ export default{
             this.$router.push("/login");   // 回到首页
         },
         // 获取导航菜单
-        getMenuList() {
-            console.log("查询菜单");
+        async getMenuList() {
+            const {data:res} = await this.$http.get("menus");
+            // console.log(res);
+            if (res.flag !== 200) return this.$message.error("获取菜单失败！"); // 访问失败
+            this.menuList = res.menus; // 访问成功 数据回填
         },
     },
 }

@@ -1,9 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// 引入Login组件
+
 import Login from '../components/Login.vue' 
-// 引入首页
 import Home from '../components/Home.vue'
+import Welcome from '../components/Welcome.vue'
+import Resource from '../components/admin/Resource.vue'
+import Instance from '../components/admin/Instance.vue'
+import Quality from '../components/admin/Quality.vue'
+import Tenant from '../components/admin/Tenant.vue'
 
 Vue.use(VueRouter)
 
@@ -18,7 +22,15 @@ const routes = [
   },
   {
     path:"/home",
-    component: Home
+    component: Home,
+    redirect:"/welcome",
+    children:[
+      { path:"/welcome", component: Welcome, },
+      { path:"/resource", component: Resource, },
+      { path:"/instance", component: Instance, },
+      { path:"/quality", component: Quality, },
+      { path:"/tenant", component: Tenant, },
+    ]
   }
 ]
 
