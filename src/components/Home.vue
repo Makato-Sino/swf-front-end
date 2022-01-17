@@ -38,10 +38,11 @@ export default{
             menuList:[],
             // 导航栏按钮icon
             iconsObject: {
-                '1':'el-icon-coin',
-                '2':'el-icon-set-up',
-                '3':'el-icon-s-data',
-                '4':'el-icon-user',
+                '1':'el-icon-s-home',
+                '2':'el-icon-coin',
+                '3':'el-icon-set-up',
+                '4':'el-icon-s-data',
+                '5':'el-icon-user',
             },
         }
     },
