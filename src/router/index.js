@@ -45,7 +45,7 @@ router.beforeEach((to, from, next)=>{
   // next 下一步 next(url):重定向至url  next():继续访问 to 路径
   if (to.path == '/login') return next();
   // 获取user
-  const userFlag = window.sessionStorage.getItem("user"); // 取出当前用户
+  const userFlag = window.sessionStorage.getItem("username"); // 取出当前用户
   if (!userFlag) return next('/login'); // 无值，返回登录页
   
   next(); // 符合要求
