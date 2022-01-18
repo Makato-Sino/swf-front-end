@@ -62,6 +62,14 @@ export default {
                 if (!valid) return; //验证失败
                 const {data:res} = await this.$http.post("login?password="+this.loginForm.password+"&username="+this.loginForm.username); //访问后台
                 if (res.status == "0") {
+                    var role_admin = res.obj.authorities.some(item=>{
+                        if (item.authority == "ROLE_ACTIVITI_ADMIN") return true;
+                    });
+                    var role_user = res.obj.authorities.some(item=>{
+                        if (item.authority == "ROLE_ACTIVITI_USER") return true;
+                    });
+                    window.sessionStorage.setItem('role_admin', role_admin); // 判断是否为管理员，路由会用来跳转到相应页面
+                    window.sessionStorage.setItem('role_user', role_user); // 普通租户
                     window.sessionStorage.setItem('username', res.obj); // 存储user对象,路由守卫会用到
                     this.$message.success("登录成功"); // 信息提示
                     this.$router.push({path: "/home"}); // 页面路由跳转

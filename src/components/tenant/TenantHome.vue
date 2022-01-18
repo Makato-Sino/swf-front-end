@@ -4,7 +4,7 @@
         <!-- 头部 -->
         <el-header>
             <div>
-                <img src="../assets/logo.png" class = "icon" alt="logo"/>
+                <img src="../../assets/logo.png" class = "icon" alt="logo"/>
                 <span>多租户云工作流管理平台</span>
             </div>
             <el-button type="info" @click="logout">退出登录</el-button>
@@ -59,7 +59,7 @@ export default{
         },
         // 获取导航菜单
         async getMenuList() {
-            const {data:res} = await this.$http.get("menus");
+            const {data:res} = await this.$http.get("tenant_menus");
             // console.log(res);
             if (res.flag !== 200) return this.$message.error("获取菜单失败！"); // 访问失败
             this.menuList = res.menus; // 访问成功 数据回填
