@@ -4,8 +4,12 @@
         <!-- 头部 -->
         <el-header>
             <div>
-                <img src="../assets/logo.png" class = "icon" alt="logo"/>
-                <span>多租户云工作流管理平台</span>
+                <img src="../assets/cloud.png" class = "icon" alt="logo"/>
+                <span>多租户云工作流管理平台（管理员）</span>
+            </div>
+            <div class="userinfo">
+                <el-avatar size="medium" :src="circleUrl"></el-avatar>
+                <span>{{showUsername}}</span>
             </div>
             <el-button type="info" @click="logout">退出登录</el-button>
         </el-header>
@@ -31,6 +35,7 @@
     </el-container>
 </template>
 <script>
+import Cookie from 'js-cookie'
 export default{
     data() {
         return {
@@ -44,7 +49,13 @@ export default{
                 '4':'el-icon-s-data',
                 '5':'el-icon-user',
             },
+            circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
         }
+    },
+    computed: {
+        showUsername() {
+            return Cookie.get('username');
+        },
     },
     // onload 事件
     created() {
@@ -104,5 +115,10 @@ export default{
 .icon{
     width: 55px;
     height: 55px;
+    margin-left: 20px;
+}
+
+.userinfo{
+    margin-left: 1300px;
 }
 </style>

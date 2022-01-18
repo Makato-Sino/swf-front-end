@@ -4,14 +4,13 @@
         <div class="login_box">
             <!-- 头像 -->
             <div class="avatar_box">
-                <img src="../assets/logo.png" alt/>
+                <img src="../assets/user.png" alt/>
             </div>
             <!-- 添加表单组件 -->
             <el-form ref="loginFormRef" :rules="loginRules" :model="loginForm" class="login_form" label-width="0">
                 <!-- 用户名 -->
                 <el-form-item prop="username">
-                    <el-input v-model="loginForm.username" prefix-icon="iconfont icon-denglu-copy
-"></el-input>
+                    <el-input v-model="loginForm.username" prefix-icon="iconfont icon-denglu-copy"></el-input>
                 </el-form-item>
                 <!-- 密码 -->
                 <el-form-item prop="password">
@@ -27,6 +26,7 @@
     </div>
 </template>
 <script>
+import Cookie from 'js-cookie'
 export default {
     data() {
         return {
@@ -62,17 +62,16 @@ export default {
                 if (!valid) return; //验证失败
                 const {data:res} = await this.$http.post("login?password="+this.loginForm.password+"&username="+this.loginForm.username); //访问后台
                 if (res.status == "0") {
-                    var role_admin = res.obj.authorities.some(item=>{
-                        if (item.authority == "ROLE_ACTIVITI_ADMIN") return true;
-                    });
-                    var role_user = res.obj.authorities.some(item=>{
-                        if (item.authority == "ROLE_ACTIVITI_USER") return true;
-                    });
-                    window.sessionStorage.setItem('role_admin', role_admin); // 判断是否为管理员，路由会用来跳转到相应页面
-                    window.sessionStorage.setItem('role_user', role_user); // 普通租户
                     window.sessionStorage.setItem('username', res.obj); // 存储user对象,路由守卫会用到
                     this.$message.success("登录成功"); // 信息提示
-                    this.$router.push({path: "/home"}); // 页面路由跳转
+                    Cookie.set('username', this.loginForm.username);
+                    console.log(Cookie.get('username'));
+                    if (res.obj.roles == "ROLE_ACTIVITI_ADMIN") {
+                        this.$router.push({path: "/home"}); // 管理员页面路由跳转
+                    }
+                    else if (res.obj.roles == "ROLE_ACTIVITI_USER") {
+                        this.$router.push({path: "/userhome"}); // 用户页面路由跳转
+                    }
                 } else {
                     this.$message.error("登录失败"); // 错误提示
                 }
