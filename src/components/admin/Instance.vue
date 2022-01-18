@@ -8,25 +8,18 @@
                 <el-table-column label="启动时间" prop="startDate"></el-table-column>
                 <el-table-column label="版本号" prop="processDefinitionVersion"></el-table-column>
                 <el-table-column label="实例状态" prop="status"></el-table-column>
-                <!-- <el-table-column label="流程定义Key" prop="processDefinitionKey"></el-table-column> -->
                 <el-table-column label="发起用户"></el-table-column>
                 <el-table-column label="操作">
-                    <!-- <template slot-scope="scope"> -->
-                        <!-- 删除 -->
-                        <!-- <el-tooltip effect="dark" content="删除" placement="top-start" :enterable="false">
-                            <el-button type="danger" icon="el-icon-delete" size="mini" ></el-button>
-                        </el-tooltip>
-                    </template> -->
                     <template slot-scope="scope">
                         <el-row>
                             <el-tooltip effect="dark" content="挂起" placement="top-start" :enterable="false">
-                                <el-button type="primary" icon="el-icon-video-pause" @click="suspendInstance(scope.row)"></el-button>
+                                <el-button type="primary" icon="el-icon-video-pause" @click="suspendInstance(scope.row.id)"></el-button>
                             </el-tooltip>
                             <el-tooltip effect="dark" content="激活" placement="top-start" :enterable="false">
-                                <el-button type="primary" icon="el-icon-video-play"></el-button>
+                                <el-button type="primary" icon="el-icon-video-play" @click="resumeInstance(scope.row.id)"></el-button>
                             </el-tooltip>
                             <el-tooltip effect="dark" content="删除" placement="top-start" :enterable="false">
-                                <el-button type="primary" icon="el-icon-delete"></el-button>
+                                <el-button type="primary" icon="el-icon-delete" @click="deleteInstance(scope.row.id)"></el-button>
                             </el-tooltip>
                         </el-row>
                     </template>
@@ -70,6 +63,38 @@ export default {
         },
         handleCurrentChange(val) {
             this.currentPage = val;
+        },
+        async suspendInstance(id) {
+            const {data:res} = await this.$http.get("processInstance/suspendInstance?instanceID=" + id);
+            if (res.status != "0") {
+                return this.$message.error("挂起流程实例失败！");
+            }
+            this.$message.success("挂起流程实例成功！");
+            this.getInstances();
+        },
+        async resumeInstance(id) {
+            const {data:res} = await this.$http.get("processInstance/resumeInstance?instanceID=" + id);
+            if (res.status != "0") {
+                return this.$message.error("激活流程实例失败！");
+            }
+            this.$message.success("激活流程实例成功！");
+            this.getInstances();
+        },
+        async deleteInstance(id) {
+            const confirmResult = await this.$confirm('确认删除该流程？', '提示', {
+                confirmButtonText:'确定',
+                cancelButtonText:'取消',
+                type:'warning'
+            }).catch(err => err)
+            if (confirmResult != 'confirm') {
+                return this.$message.info("取消删除！");
+            }
+            const {data:res} = await this.$http.get("processInstance/deleteInstance?instanceID=" + id);
+            if (res.status != "0") {
+                return this.$message.error("删除流程实例失败！");
+            }
+            this.$message.success("删除流程实例成功！");
+            this.getInstances();
         },
     },
 }
