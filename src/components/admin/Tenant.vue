@@ -19,17 +19,18 @@
             <el-table :data="userList" border stripe>
                 <!-- 索引列 -->
                 <el-table-column type="index"></el-table-column>
+                <el-table-column label="姓名" prop="name"></el-table-column>
                 <el-table-column label="用户名" prop="username"></el-table-column>
-                <el-table-column label="邮箱" prop="email"></el-table-column>
                 <el-table-column label="密码" prop="password"></el-table-column>
-                <el-table-column label="角色" prop="role"></el-table-column>
-                <el-table-column label="状态" prop="state">
-                    <!-- 作用域插槽 -->
-                    <template slot-scope="scope">
-                        <!-- {{scope.row}} 每行数据 -->
-                        <el-switch v-model="scope.row.state" @change="userStateChanged(scope.row)"></el-switch>
-                    </template>
-                </el-table-column>
+                <el-table-column label="地址" prop="address"></el-table-column>
+                <el-table-column label="角色" prop="roles"></el-table-column>
+<!--                <el-table-column label="状态" prop="state">-->
+<!--                    &lt;!&ndash; 作用域插槽 &ndash;&gt;-->
+<!--                    <template slot-scope="scope">-->
+<!--                        &lt;!&ndash; {{scope.row}} 每行数据 &ndash;&gt;-->
+<!--                        <el-switch v-model="scope.row.state" @change="userStateChanged(scope.row)"></el-switch>-->
+<!--                    </template>-->
+<!--                </el-table-column>-->
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <!-- 修改 -->
@@ -63,14 +64,17 @@
         <!-- 新增用户 -->
         <el-dialog title="添加用户" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
             <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="70px">
+                <el-form-item label="姓名" prop="name">
+                    <el-input v-model="addForm.name"></el-input>
+                </el-form-item>
                 <el-form-item label="用户名" prop="username">
                     <el-input v-model="addForm.username"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
                     <el-input v-model="addForm.password"></el-input>
                 </el-form-item>
-                <el-form-item label="邮箱" prop="email">
-                    <el-input v-model="addForm.email"></el-input>
+                <el-form-item label="地址" prop="address">
+                    <el-input v-model="addForm.address"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -82,14 +86,17 @@
         <!-- 修改用户信息 -->
         <el-dialog title="修改用户信息" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
             <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="70px">
+                <el-form-item label="姓名" prop="name">
+                    <el-input v-model="editForm.name" disabled></el-input>
+                </el-form-item>
                 <el-form-item label="用户名" prop="username">
                     <el-input v-model="editForm.username" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
                     <el-input v-model="editForm.password"></el-input>
                 </el-form-item>
-                <el-form-item label="邮箱" prop="email">
-                    <el-input v-model="editForm.email"></el-input>
+                <el-form-item label="地址" prop="address">
+                    <el-input v-model="editForm.address"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -118,39 +125,44 @@ export default {
             editDialogVisible: false, // 显示/隐藏修改用户框
             // 添加表单信息
             addForm: {
+                name: '',
                 username: '',
                 password: '',
-                email: '',
+                address: '',
             },
             // 修改用户信息
             editForm: {
                 password: '',
-                email: '',
+                address: '',
             },
             // 新增表单验证
             addFormRules: {
+                name: [
+                    { required: true, message: '姓名', trigger: 'blur' },
+                    { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+                ],
                 username: [
                     { required: true, message: '请输入用户名', trigger: 'blur' },
                     { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
                 ],
                 password: [
                     { required: true, message: '请输入密码', trigger: 'blur' },
-                    { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+                    { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
                 ],
-                email: [
-                    { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-                    { min: 7, max: 30, message: '请输入正确的邮箱地址', trigger: 'blur' }
+                address: [
+                    { required: true, message: '请输入联系地址', trigger: 'blur' },
+                    { min: 1, max: 30, message: '请输入正确的联系地址', trigger: 'blur' }
                 ],
             },
             // 修改表单验证
             editFormRules: {
                 password: [
                     { required: true, message: '请输入密码', trigger: 'blur' },
-                    { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+                    { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
                 ],
-                email: [
-                    { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-                    { min: 7, max: 30, message: '请输入正确的邮箱地址', trigger: 'blur' }
+                address: [
+                    { required: true, message: '请输入联系地址', trigger: 'blur' },
+                    { min: 1, max: 30, message: '请输入正确的联系地址', trigger: 'blur' }
                 ],
             },
         }
@@ -171,14 +183,14 @@ export default {
             this.queryInfo.pageNum = newPage;
             this.getUserList();
         },
-        async userStateChanged(userInfo) {
-            const {data:res} = await this.$http.put("userState?id=" + userInfo.id + "&state=" + userInfo.state);
-            if (res != "success") {
-                userInfo.state = !userInfo.state;
-                return this.$message.error("修改用户状态失败！");
-            }
-            this.$message.success("修改用户状态成功！");
-        },
+        // async userStateChanged(userInfo) {
+        //     const {data:res} = await this.$http.put("userState?id=" + userInfo.id + "&state=" + userInfo.state);
+        //     if (res != "success") {
+        //         userInfo.state = !userInfo.state;
+        //         return this.$message.error("修改用户状态失败！");
+        //     }
+        //     this.$message.success("修改用户状态成功！");
+        // },
         // 监听添加用户窗口
         addDialogClosed() {
             this.$refs.addFormRef.resetFields();
@@ -220,6 +232,7 @@ export default {
             const {data:res} = await this.$http.get("getUpdateUser?id=" + id);
             this.editForm = res;
             this.editDialogVisible = true;
+            console.log(id);
         },
         // 关闭用户信息修改窗口
         editDialogClosed() {

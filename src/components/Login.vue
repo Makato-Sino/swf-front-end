@@ -32,8 +32,8 @@ export default {
         return {
             // 表单数据对象
             loginForm: {
-                username:"admin01",
-                password:"123456"
+                username:"triniti",
+                password:"1"
             },
             // 验证对象
             loginRules: {
@@ -45,7 +45,7 @@ export default {
                 // 校验密码
                 password: [
                     { required: true, message: '请输入密码', trigger: 'blur' }, //必填项验证
-                    { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' } // 长度验证
+                    { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' } // 长度验证
                 ],
             },
         }
@@ -60,9 +60,9 @@ export default {
             // 验证校验规则
             this.$refs.loginFormRef.validate(async valid => {
                 if (!valid) return; //验证失败
-                const {data:res} = await this.$http.post("login",this.loginForm); //访问后台
-                if (res.flag == "ok") {
-                    window.sessionStorage.setItem('user', res.user); // 存储user对象
+                const {data:res} = await this.$http.post("login?password="+this.loginForm.password+"&username="+this.loginForm.username); //访问后台
+                if (res.status == "0") {
+                    window.sessionStorage.setItem('username', res.obj); // 存储user对象,路由守卫会用到
                     this.$message.success("登录成功"); // 信息提示
                     this.$router.push({path: "/home"}); // 页面路由跳转
                 } else {
