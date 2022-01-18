@@ -161,6 +161,21 @@ export default {
                     { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
                 ],
             },
+            // 修改表单验证
+            // editFormRules: {
+            //     name: [
+            //         { required: true, message: '请输入姓名', trigger: 'blur' },
+            //         { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+            //     ],
+            //     password: [
+            //         { required: true, message: '请输入密码', trigger: 'blur' },
+            //         { min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur' }
+            //     ],
+            //     address: [
+            //         { required: true, message: '请输入联系地址', trigger: 'blur' },
+            //         { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+            //     ],
+            // },
         }
     },
     methods: {
