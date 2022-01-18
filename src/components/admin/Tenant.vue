@@ -24,27 +24,16 @@
                 <el-table-column label="密码" prop="password"></el-table-column>
                 <el-table-column label="地址" prop="address"></el-table-column>
                 <el-table-column label="角色" prop="roles"></el-table-column>
-<!--                <el-table-column label="状态" prop="state">-->
-<!--                    &lt;!&ndash; 作用域插槽 &ndash;&gt;-->
-<!--                    <template slot-scope="scope">-->
-<!--                        &lt;!&ndash; {{scope.row}} 每行数据 &ndash;&gt;-->
-<!--                        <el-switch v-model="scope.row.state" @change="userStateChanged(scope.row)"></el-switch>-->
-<!--                    </template>-->
-<!--                </el-table-column>-->
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <!-- 修改 -->
-                        <el-tooltip effect="dark" content="修改" placement="top-start" :enterable="false">
+                        <!-- <el-tooltip effect="dark" content="修改" placement="top-start" :enterable="false">
                             <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row.id)"></el-button>
-                        </el-tooltip>
+                        </el-tooltip> -->
                         <!-- 删除 -->
                         <el-tooltip effect="dark" content="删除" placement="top-start" :enterable="false">
                             <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteUser(scope.row.id)"></el-button>
                         </el-tooltip>
-                        <!-- 权限 -->
-                        <!-- <el-tooltip effect="dark" content="分配权限" placement="top-start" :enterable="false">
-                            <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
-                        </el-tooltip> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -86,17 +75,17 @@
         <!-- 修改用户信息 -->
         <el-dialog title="修改用户信息" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
             <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="70px">
-                <el-form-item label="姓名" prop="name">
-                    <el-input v-model="editForm.name" disabled></el-input>
-                </el-form-item>
                 <el-form-item label="用户名" prop="username">
                     <el-input v-model="editForm.username" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="密码" prop="password">
-                    <el-input v-model="editForm.password"></el-input>
+                <el-form-item label="姓名" prop="name">
+                    <el-input v-model="editForm.name"></el-input>
                 </el-form-item>
                 <el-form-item label="地址" prop="address">
                     <el-input v-model="editForm.address"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="password">
+                    <el-input v-model="editForm.password"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -126,20 +115,27 @@ export default {
             // 添加表单信息
             addForm: {
                 name: '',
+                address:'',
                 username: '',
                 password: '',
-                address: '',
             },
             // 修改用户信息
             editForm: {
-                password: '',
+                name: '',
                 address: '',
+                password:'',
+                username:'',
+                roles:"ROLE_ACTIVITI_USER",
             },
             // 新增表单验证
             addFormRules: {
                 name: [
-                    { required: true, message: '姓名', trigger: 'blur' },
-                    { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+                    { required: true, message: '请输入姓名', trigger: 'blur' },
+                    { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+                ],
+                address: [
+                    { required: true, message: '请输入联系地址', trigger: 'blur' },
+                    { min: 1, max: 30, message: '请输入正确的联系地址', trigger: 'blur' }
                 ],
                 username: [
                     { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -147,31 +143,31 @@ export default {
                 ],
                 password: [
                     { required: true, message: '请输入密码', trigger: 'blur' },
-                    { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
-                ],
-                address: [
-                    { required: true, message: '请输入联系地址', trigger: 'blur' },
-                    { min: 1, max: 30, message: '请输入正确的联系地址', trigger: 'blur' }
+                    { min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur' }
                 ],
             },
             // 修改表单验证
             editFormRules: {
+                name: [
+                    { required: true, message: '请输入姓名', trigger: 'blur' },
+                    { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+                ],
                 password: [
                     { required: true, message: '请输入密码', trigger: 'blur' },
-                    { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+                    { min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur' }
                 ],
                 address: [
                     { required: true, message: '请输入联系地址', trigger: 'blur' },
-                    { min: 1, max: 30, message: '请输入正确的联系地址', trigger: 'blur' }
+                    { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
                 ],
             },
         }
     },
     methods: {
         async getUserList() {
-            const {data:res} = await this.$http.get("alluser", {params:this.queryInfo});
-            this.userList = res.data;
-            this.total = res.numbers;
+            const {data:res} = await this.$http.get("user/getUserList", {params:this.queryInfo});
+            this.userList = res.obj.data;
+            this.total = res.obj.numbers;
         },
         // 最大条目数量变化
         handleSizeChange(newSize) {
@@ -183,14 +179,6 @@ export default {
             this.queryInfo.pageNum = newPage;
             this.getUserList();
         },
-        // async userStateChanged(userInfo) {
-        //     const {data:res} = await this.$http.put("userState?id=" + userInfo.id + "&state=" + userInfo.state);
-        //     if (res != "success") {
-        //         userInfo.state = !userInfo.state;
-        //         return this.$message.error("修改用户状态失败！");
-        //     }
-        //     this.$message.success("修改用户状态成功！");
-        // },
         // 监听添加用户窗口
         addDialogClosed() {
             this.$refs.addFormRef.resetFields();
@@ -201,8 +189,8 @@ export default {
                 if (!valid) {
                     return;
                 }
-                const {data:res} = await this.$http.post("addUser", this.addForm);
-                if (res != "success") {
+                const {data:res} = await this.$http.post("/user/addUser", this.addForm);
+                if (res.msg != "success") {
                     return this.$message.error("添加用户失败！");
                 }
                 this.$message.success("添加用户成功！");
@@ -220,8 +208,8 @@ export default {
             if (confirmResult != 'confirm') {
                 return this.$message.info("取消删除！");
             }
-            const {data:res} = await this.$http.delete("deleteUser?id=" + id);
-            if (res != "success") {
+            const {data:res} = await this.$http.delete("user/deleteUser?id=" + id);
+            if (res.msg != "success") {
                 return this.$message.error("删除失败！");
             }
             this.$message.success("删除成功！");
@@ -229,10 +217,10 @@ export default {
         },
         // 显示/隐藏修改用户信息窗口
         async showEditDialog(id) {
-            const {data:res} = await this.$http.get("getUpdateUser?id=" + id);
-            this.editForm = res;
+            const {data:res} = await this.$http.get("user/getUserByID?id=" + id);
+            this.editForm = res.obj;
             this.editDialogVisible = true;
-            console.log(id);
+            console.log(this.editForm);
         },
         // 关闭用户信息修改窗口
         editDialogClosed() {
@@ -244,8 +232,9 @@ export default {
                 if (!valid) {
                     return;
                 }
-                const {data:res} = await this.$http.put("editUser", this.editForm);
-                if (res != "success") {
+                // console.log(this.editForm);
+                const {data:res} = await this.$http.put("user/editUser", this.editForm);
+                if (res.msg != "success") {
                     return this.$message.error("修改用户信息失败！");
                 }
                 this.editDialogVisible = false;

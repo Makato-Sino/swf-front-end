@@ -8,6 +8,11 @@ import Resource from '../components/admin/Resource.vue'
 import Instance from '../components/admin/Instance.vue'
 import Quality from '../components/admin/Quality.vue'
 import Tenant from '../components/admin/Tenant.vue'
+import UserHome from '../components/UserHome.vue'
+import MyProcess from '../components/user/MyProcess.vue'
+import NewProcess from '../components/user/NewProcess.vue'
+import Purchase from '../components/user/Purchase.vue'
+import WelcomeUser from '../components/WelcomeUser.vue'
 
 Vue.use(VueRouter)
 
@@ -31,7 +36,18 @@ const routes = [
       { path:"/quality", component: Quality, },
       { path:"/tenant", component: Tenant, },
     ]
-  }
+  },
+  {
+    path:"/userhome",
+    component: UserHome,
+    redirect:"/welcomeuser",
+    children:[
+      { path:"/welcomeuser", component: WelcomeUser, },
+      { path:"/myprocess", component: MyProcess, },
+      { path:"/newprocess", component: NewProcess, },
+      { path:"/purchase", component: Purchase, },
+    ]
+  },
 ]
 
 const router = new VueRouter({

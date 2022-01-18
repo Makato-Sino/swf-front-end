@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3> {{showUsername}}，您好！欢迎使用多租户云工作流管理平台</h3>
+        <h3>{{showUsername}}，您好！欢迎使用多租户云工作流管理平台</h3>
     </div>
 </template>
 <script>

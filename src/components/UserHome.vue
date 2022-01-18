@@ -5,7 +5,7 @@
         <el-header>
             <div>
                 <img src="../assets/cloud.png" class = "icon" alt="logo"/>
-                <span>多租户云工作流管理平台（管理员）</span>
+                <span>多租户云工作流管理平台(用户）</span>
             </div>
             <div class="userinfo">
                 <el-avatar size="medium" :src="circleUrl"></el-avatar>
@@ -19,9 +19,21 @@
             <!-- 侧边栏 -->
             <el-aside width="200px">
                 <el-menu background-color="#545c64" text-color="#fff" active-text-color="#409eff" :router="true">
-                    <el-menu-item :index="item.path" v-for="item in menuList" :key="item.id">
+                    <!-- <el-menu-item :index="item.path"  :key="item.id">
                         <i :class="iconsObject[item.id]"></i>
                         <span slot="title">{{item.title}}</span>
+                    </el-menu-item> -->
+                    <el-menu-item index="purchase">
+                        <i class="el-icon-shopping-cart-1"></i>
+                        <span slot="title">购买服务</span>
+                    </el-menu-item>
+                    <el-menu-item index="myprocess">
+                        <i class="el-icon-shopping-bag-1"></i>
+                        <span slot="title">我的流程</span>
+                    </el-menu-item>
+                    <el-menu-item index="newprocess">
+                        <i class="el-icon-document-add"></i>
+                        <span slot="title">新建流程</span>
                     </el-menu-item>
                 </el-menu>
             </el-aside>
@@ -39,16 +51,6 @@ import Cookie from 'js-cookie'
 export default{
     data() {
         return {
-            // 菜单列表
-            menuList:[],
-            // 导航栏按钮icon
-            iconsObject: {
-                '1':'el-icon-s-home',
-                '2':'el-icon-coin',
-                '3':'el-icon-set-up',
-                '4':'el-icon-s-data',
-                '5':'el-icon-user',
-            },
             circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
         }
     },
@@ -59,8 +61,7 @@ export default{
     },
     // onload 事件
     created() {
-        // 查询menuList
-        this.getMenuList();
+        
     },
     methods: {
         // 登出
@@ -68,13 +69,7 @@ export default{
             window.sessionStorage.clear(); // 清除session
             this.$router.push("/login");   // 回到首页
         },
-        // 获取导航菜单
-        async getMenuList() {
-            const {data:res} = await this.$http.get("menus");
-            // console.log(res);
-            if (res.flag !== 200) return this.$message.error("获取菜单失败！"); // 访问失败
-            this.menuList = res.menus; // 访问成功 数据回填
-        },
+
     },
 }
 </script>
