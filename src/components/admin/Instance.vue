@@ -8,7 +8,13 @@
                 <el-table-column label="启动时间" prop="startDate"></el-table-column>
                 <el-table-column label="版本号" prop="processDefinitionVersion"></el-table-column>
                 <el-table-column label="实例状态" prop="status"></el-table-column>
-                <el-table-column label="发起用户"></el-table-column>
+                <el-table-column label="发起用户">
+                  <template slot-scope="scope">
+<!--                    <span>{{instanceList[scope.$index].testappend}}</span>-->
+<!--                    <span>{{scope.row.testappend}}</span>-->
+                    <span>{{variableList[scope.$index]}}</span>
+                  </template>
+                </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-row>
@@ -30,7 +36,7 @@
             <el-pagination 
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentNum"
+                :current-page=1
                 :page-sizes="[1, 5, 10, 20]"
                 :page-size="pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
@@ -47,15 +53,28 @@ export default {
     data() {
         return {
             instanceList:[],
+            variableList:[],
             currentPage: 1,
             total: 20,
             pageSize: 10,
         }
     },
     methods: {
+
         async getInstances() {
             const {data:res} = await this.$http.get("processInstance/getInstances");
             this.instanceList = res.obj;
+            for(let i =0; i < this.instanceList.length;i++){
+              const {data:res_v} = await this.$http.get("processInstance/variables?instanceID="+this.instanceList[i].id);
+              if(res_v.obj.length!=0){
+                this.variableList[i]=res_v.obj[0].value.name;
+                // this.instanceList[i].testappend=res_v.obj[0].value.name;
+              }else{
+                this.variableList[i]= "未绑定用户";
+              }
+          }
+            // console.log(this.variableList)
+
         },
         handleSizeChange(val) {
             this.currentPage = 1;
