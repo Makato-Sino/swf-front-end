@@ -63,9 +63,9 @@ export default {
             const {data:res} = await this.$http.get("processInstance/getInstances");
             this.instanceList = res.obj;
             for(let i =0; i < this.instanceList.length;i++){
-                const {data:res_v} = await this.$http.get("processInstance/variables?instanceID="+this.instanceList[i].id);
+                const {data:res_v} = await this.$http.get("processInstance/variables?instanceID=" + this.instanceList[i].id);
                 if(res_v.obj.length != 0) {
-                    this.variableList[i] = res_v.obj[0].value.username;
+                    this.variableList[i] = res_v.obj[0].value.name;
                 } else {
                     this.variableList[i]= "未绑定用户";
                 }
