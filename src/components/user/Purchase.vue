@@ -39,7 +39,7 @@
 <script>
 export default {
     created() {
-        // this.getInstances();
+        this.getServices();
     },
     data() {
         return {
@@ -49,6 +49,9 @@ export default {
         }
     },
     methods: {
+        async getServices() {
+            
+        },
         // 最大条目数量变化
         handleSizeChange(newSize) {
             // this.queryInfo.pageSize = newSize;
