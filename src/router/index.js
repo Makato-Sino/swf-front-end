@@ -10,7 +10,7 @@ import Quality from '../components/admin/Quality.vue'
 import Tenant from '../components/admin/Tenant.vue'
 import UserHome from '../components/UserHome.vue'
 import MyProcess from '../components/user/MyProcess.vue'
-import NewProcess from '../components/user/NewProcess.vue'
+import MyInstance from '../components/user/MyInstance.vue'
 import Purchase from '../components/user/Purchase.vue'
 import WelcomeUser from '../components/WelcomeUser.vue'
 
@@ -44,7 +44,7 @@ const routes = [
     children:[
       { path:"/welcomeuser", component: WelcomeUser, },
       { path:"/myprocess", component: MyProcess, },
-      { path:"/newprocess", component: NewProcess, },
+      { path:"/myinstance", component: MyInstance, },
       { path:"/purchase", component: Purchase, },
     ]
   },
