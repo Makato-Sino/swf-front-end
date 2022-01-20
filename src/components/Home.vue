@@ -49,6 +49,9 @@ export default{
                 '4':'el-icon-s-data',
                 '5':'el-icon-user',
             },
+            backgroundDiv: {
+                backgroundImage: 'url(' + require('../assets/background.jpeg') + ')'
+            },
             circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
         }
     },

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-card>
+        <el-card class="card">
             <el-table :data="instanceList.slice((currentPage-1)*pageSize,currentPage*pageSize)" border stripe>
                 <el-table-column label="流程实例名称" prop="name"></el-table-column>
                 <el-table-column label="流程实例ID" prop="id"></el-table-column>
@@ -10,8 +10,6 @@
                 <el-table-column label="实例状态" prop="status"></el-table-column>
                 <el-table-column label="发起用户">
                   <template slot-scope="scope">
-<!--                    <span>{{instanceList[scope.$index].testappend}}</span>-->
-<!--                    <span>{{scope.row.testappend}}</span>-->
                     <span>{{variableList[scope.$index]}}</span>
                   </template>
                 </el-table-column>
@@ -33,7 +31,7 @@
             </el-table>
 
             <!-- 分页组件 -->
-            <el-pagination 
+            <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page=1
@@ -65,16 +63,20 @@ export default {
             const {data:res} = await this.$http.get("processInstance/getInstances");
             this.instanceList = res.obj;
             for(let i =0; i < this.instanceList.length;i++){
-              const {data:res_v} = await this.$http.get("processInstance/variables?instanceID="+this.instanceList[i].id);
-              if(res_v.obj.length!=0){
-                this.variableList[i]=res_v.obj[0].value.name;
-                // this.instanceList[i].testappend=res_v.obj[0].value.name;
-              }else{
-                this.variableList[i]= "未绑定用户";
-              }
-          }
-            // console.log(this.variableList)
-
+                const {data:res_v} = await this.$http.get("processInstance/variables?instanceID=" + this.instanceList[i].id);
+                if(res_v.obj.length != 0) {
+                  if(res_v.obj[0].value){
+                    this.variableList[i] = res_v.obj[0].value.name;
+                  }else if(res_v.obj[0].processInstanceId){
+                    this.variableList[i] = "不为空，没有username"
+                  }
+                  else{
+                    this.variableList[i] = "奇怪的东西增加了"
+                  }
+                } else {
+                    this.variableList[i]= "未绑定用户";
+                }
+            }
         },
         handleSizeChange(val) {
             this.currentPage = 1;

@@ -1,112 +1,67 @@
 <template>
-    <div>
-        <div id="title">购买服务</div>
-        <el-card>
-            <el-table :data="serviceList.slice((currentPage-1)*pageSize,currentPage*pageSize)" border stripe>
-                <el-table-column label="流程定义名称" prop="name"></el-table-column>
-                <el-table-column label="流程定义ID" prop="processDefinitionId"></el-table-column>
-                <el-table-column label="版本号" prop="processDefinitionVersion"></el-table-column>
-                <el-table-column label="流程购买状态" prop="state"></el-table-column>
-                <el-table-column label="操作">
-                    <template slot-scope="scope">
-                        <el-row>
-                            <el-tooltip effect="dark" content="查看" placement="top-start" :enterable="false">
-                                <el-button type="primary" icon="el-icon-info" @click="checkService(scope.row.id)"></el-button>
-                            </el-tooltip>
-                            <el-tooltip effect="dark" content="购买" placement="top-start" :enterable="false">
-                                <el-button type="primary" icon="el-icon-goods" @click="buyService(scope.row.id)"></el-button>
-                            </el-tooltip>
-                            <el-tooltip effect="dark" content="删除" placement="top-start" :enterable="false">
-                                <el-button type="primary" icon="el-icon-delete" @click="deleteService(scope.row.id)"></el-button>
-                            </el-tooltip>
-                        </el-row>
-                    </template>
-                </el-table-column>
-            </el-table>
+  <div>
+    <!-- 购买服务按钮 -->
+    <el-button type="primary" @click="editDialogVisible = true">购买服务</el-button>
 
-            <!-- 分页组件 -->
-            <el-pagination 
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[1, 2, 3, 4]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="serviceList.length">
-            </el-pagination>
-        </el-card>
-    </div>
+    <!-- 购买服务表单 -->
+    <el-dialog title="购买服务" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
+      <el-form label-width="70px">
+        <el-form-item label="流程名称" prop="processName">
+            <el-input v-model="processName"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-upload
+          class="upload-demo"
+          ref="upload"
+          action=""
+          :http-request = submitUpload
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :name="fileName"
+          :limit="1"
+          :file-list="fileList"
+          :auto-upload="false">
+          <el-button slot="trigger" size="small" type="primary">部署流程</el-button>
+          <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
+          <div slot="tip" class="el-upload__tip">只能上传bpmn/zip文件</div>
+      </el-upload>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="editDialogVisible = false">取 消</el-button>
+          <!-- <el-button type="primary" @click="addUser">确 认</el-button> -->
+      </span>
+    </el-dialog>
+
+  </div>
 </template>
 <script>
+import Cookie from "js-cookie";
 export default {
-    created() {
-        this.getServices();
+  data() {
+    return {
+      processName: "",
+      fileName: "processName",
+      fileList: [],
+      editDialogVisible: false,
+      username: Cookie.get('username'),
+    };
+  },
+  methods: {
+    async submitUpload(param) { 
+      const filelist = new FormData()
+      filelist.append('processFile',param.file)
+      console.log(param.file)
+      const {data:res} = await this.$http.post("processDefinition/uploadStreamAndDeployment?processName=" + this.processName + "&username=" + this.username, filelist);
+      if (res.msg != "success") {
+        return this.$message.error("部署流程定义失败！");
+      }
+      this.editDialogVisible = false;
+      return this.$message.success("部署流程定义成功！");
     },
-    data() {
-        return {
-            serviceList: [],
-            currentPage: 1,
-            total: 0,
-            pageSize: 1,
-        }
-    },
-    methods: {
-        async getServices() {
-            this.serviceList = [
-            {
-                name: 1,
-                processDefinitionId: 1,
-                processDefinitionVersion: 1,
-                state: 1,
-            },
-            {
-                name: 2,
-                processDefinitionId: 2,
-                processDefinitionVersion: 2,
-                state: 2,
-            },
-            {
-                name: 3,
-                processDefinitionId: 3,
-                processDefinitionVersion: 3,
-                state: 3,
-            },
-            {
-                name: 4,
-                processDefinitionId: 4,
-                processDefinitionVersion: 4,
-                state: 4,
-            },
-            {
-                name: 5,
-                processDefinitionId: 5,
-                processDefinitionVersion: 5,
-                state: 5,
-            },
-            ];
-        },
-        // 最大条目数量变化
-        handleSizeChange(newSize) {
-            this.currentPage = 1;
-            this.pageSize = newSize;
-        },
-        // pageNum变化
-        handleCurrentChange(newPage) {
-            this.currentPage = newPage;
-        },
-        // 查看服务信息
-        checkService(id) {
-
-        },
-        // 购买服务
-        async buyService(id) {
-
-        },
-        // 删除服务
-        async deleteService(id) {
-
-        },
-    },
+    handleRemove(file, fileList) { console.log(file, fileList); },
+    handlePreview(file) { console.log(file); },
+    showEditDialog() { this.editDialogVisible = true; },
+    editDialogClosed() { this.editDialogVisible = false;},
+  }
 }
 </script>
 <style scoped>

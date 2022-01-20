@@ -10,14 +10,8 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-row>
-<!--              <el-tooltip effect="dark" content="挂起" placement="top-start" :enterable="false">-->
-<!--                <el-button type="primary" icon="el-icon-video-pause" @click="suspendInstance(scope.row.id)"></el-button>-->
-<!--              </el-tooltip>-->
-<!--              <el-tooltip effect="dark" content="激活" placement="top-start" :enterable="false">-->
-<!--                <el-button type="primary" icon="el-icon-video-play" @click="resumeInstance(scope.row.id)"></el-button>-->
-<!--              </el-tooltip>-->
               <el-tooltip effect="dark" content="启动实例" placement="top-start" :enterable="false">
-                <el-button type="primary" icon="el-icon-plus" @click="startFormParam(scope.row.Key)"></el-button>
+                <el-button type="primary" icon="el-icon-switch-button" @click="startFormParam(scope.row.Key)"></el-button>
               </el-tooltip>
 
               <el-tooltip effect="dark" content="删除流程部署" placement="top-start" :enterable="false">
@@ -122,7 +116,7 @@ export default {
         if (!valid) {
           return;
         }
-        const {data:res} = await this.$http.get("processInstance/startProcess?processDefinitionKey="+this.startForm.processDefinitionKey+"&instanceName="+this.startForm.instanceName);
+        const {data:res} = await this.$http.get("processInstance/startProcess?processDefinitionKey=" + this.startForm.processDefinitionKey + "&instanceName=" + this.startForm.instanceName);
         if (res.status != "0") {
           return this.$message.error("启动流程实例失败！");
         }

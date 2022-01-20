@@ -19,10 +19,10 @@
             <!-- 侧边栏 -->
             <el-aside width="200px">
                 <el-menu background-color="#545c64" text-color="#fff" active-text-color="#409eff" :router="true">
-                    <!-- <el-menu-item :index="item.path"  :key="item.id">
-                        <i :class="iconsObject[item.id]"></i>
-                        <span slot="title">{{item.title}}</span>
-                    </el-menu-item> -->
+                    <el-menu-item index="welcomeuser">
+                        <i class="el-icon-s-home"></i>
+                        <span slot="title">首页</span>
+                    </el-menu-item>
                     <el-menu-item index="purchase">
                         <i class="el-icon-shopping-cart-1"></i>
                         <span slot="title">购买服务</span>
@@ -31,9 +31,9 @@
                         <i class="el-icon-shopping-bag-1"></i>
                         <span slot="title">我的流程</span>
                     </el-menu-item>
-                    <el-menu-item index="newprocess">
-                        <i class="el-icon-document-add"></i>
-                        <span slot="title">新建流程</span>
+                    <el-menu-item index="myinstance">
+                        <i class="el-icon-coin"></i>
+                        <span slot="title">我的实例</span>
                     </el-menu-item>
                 </el-menu>
             </el-aside>
