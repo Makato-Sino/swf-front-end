@@ -1,7 +1,33 @@
 <template>
   <div>
-    <!-- 购买服务按钮 -->
-    <el-button type="primary" @click="editDialogVisible = true">购买服务</el-button>
+    <div id="title">购买服务</div>
+    <el-card>
+      <el-table :data="serviceList.slice((currentPage-1)*pageSize,currentPage*pageSize)" border stripe>
+        <el-table-column type="index"></el-table-column>
+        <el-table-column label="服务名称" prop="name"></el-table-column>
+        <el-table-column label="最大并发实例数" prop="limit"></el-table-column>
+        <el-table-column label="服务级别" prop="level"></el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-tooltip effect="dark" content="购买服务" placement="top-start" :enterable="false">
+                <!-- 购买服务按钮 -->
+                <el-button type="primary" @click="editDialogVisible = true">购买服务</el-button>
+              </el-tooltip>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!-- 分页组件 -->
+      <el-pagination 
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[1, 5, 10, 20]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="serviceList.length">
+      </el-pagination>
+    </el-card>
 
     <!-- 购买服务表单 -->
     <el-dialog title="购买服务" :visible.sync="editDialogVisible" width="50%" @close="editDialogClosed">
@@ -40,6 +66,9 @@
 <script>
 import Cookie from "js-cookie";
 export default {
+  created() {
+    this.getServiceList();
+  },
   data() {
     return {
       processName: "",
@@ -47,9 +76,17 @@ export default {
       fileList: [],
       editDialogVisible: false,
       username: Cookie.get('username'),
+      serviceList: [],
+      currentPage: 1,
+      pageSize: 10,
     };
   },
   methods: {
+    async getServiceList() {
+      const {data:res} = await this.$http.get("services");
+      if (res.flag !== 200) return this.$message.error("获取服务失败！");
+      this.serviceList = res.services;
+    },
     async submitUpload(param) {
       // console.log(param.file)
       const params = new FormData()
@@ -74,6 +111,13 @@ export default {
     editDialogClosed() { this.editDialogVisible = false;},
     async submitImportForm() {
       this.$refs.upload.submit()
+    },
+    handleSizeChange(val) {
+      this.currentPage = 1;
+      this.pageSize = val;
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
     },
   }
 }
